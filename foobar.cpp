@@ -33,9 +33,10 @@ public:
 
 void promptUserForFiles(std::string &inputFilePath,
                         std::string &outputFilePath);
-std::vector<Foobar *> *createFoobarsVector(std::string &inputFile);
+std::vector<Foobar *> *createFoobarVector(std::string &inputFile);
 void createOutputFoobarFile(std::vector<Foobar *> *foolist,
                             std::string &outputFilePath);
+void freeFoobarVector(std::vector<Foobar *> *foolist);
 
 int main(int argc, char *argv[]) {
   std::string inputFile, outputFile;
@@ -44,20 +45,21 @@ int main(int argc, char *argv[]) {
 
   std::ofstream ostream(outputFile.c_str());
 
-  std::vector<Foobar *> *foolist = createFoobarsVector(inputFile);
+  std::vector<Foobar *> *foolist = createFoobarVector(inputFile);
   createOutputFoobarFile(foolist, outputFile);
+
+  freeFoobarVector(foolist);
 }
 
 void promptUserForFiles(std::string &inputFilePath,
                         std::string &outputFilePath) {
   std::cout << "Enter the name of the input file: ";
   std::cin >> inputFilePath;
-  std::cout << "\nEnter the name of the output file: ";
+  std::cout << "Enter the name of the output file: ";
   std::cin >> outputFilePath;
-  std::cout << '\n';
 }
 
-std::vector<Foobar *> *createFoobarsVector(std::string &inputFile) {
+std::vector<Foobar *> *createFoobarVector(std::string &inputFile) {
   std::string word;
   std::stringstream ss;
   std::ifstream istream(inputFile.c_str());
@@ -69,7 +71,6 @@ std::vector<Foobar *> *createFoobarsVector(std::string &inputFile) {
 
   while (std::getline(ss, word, ' ')) {
     Foobar *fooptr = nullptr;
-    std::cout << word << '\n';
     if (word == "foobar") {
       std::getline(ss, word, '\n');
       fooptr = new Foobar(word);
@@ -105,4 +106,11 @@ void createOutputFoobarFile(std::vector<Foobar *> *foolist,
   }
 
   ostream.close();
+}
+
+void freeFoobarVector(std::vector<Foobar *> *foolist) {
+  for (size_t i = 0; i < foolist->size(); i++) {
+    delete foolist->at(i);
+  }
+  delete foolist;
 }
