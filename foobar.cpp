@@ -11,12 +11,13 @@ private:
 
 public:
   Foobar(std::string &name) : name(name) {}
-  Foobar(std::string &name, int position) : position(position), name(name) {}
 
   virtual int getStrength() { return this->position; }
-  int getPosition() { return this->position; }
   std::string &getName() { return this->name; }
   void setPosition(int pos) { this->position = pos; }
+
+protected:
+  int getPosition() { return this->position; }
 };
 
 class Foo : public Foobar {
